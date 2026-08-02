@@ -7,9 +7,11 @@
 *.so
 *.dylib
 
-# Built CLI binary
+# Built CLI binary & local bin directory
 /dp1
 /dp1-cli
+/bin/
+bin/
 
 # Test binaries & coverage tools
 *.test

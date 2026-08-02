@@ -2,46 +2,154 @@
 # ==============================================================================
 # Script: generate_env_file.sh
 # Location: testing/generate_env_file.sh
-# Purpose: Dynamically generates a fresh Ed25519 keypair and writes testing/.env
+# Purpose: Standalone dynamic Ed25519 keypair generator for testing/.env
+# Compatible with any machine (uses dp1 CLI or built-in Python 3 fallback)
 # ==============================================================================
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DP1_CLI_DIR="$(cd "${SCRIPT_DIR}/../dp1-cli" && pwd)"
 ENV_FILE="${SCRIPT_DIR}/.env"
-BIN="${DP1_CLI_DIR}/dp1"
 
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 echo -e "${BLUE}[GENERATE-ENV] Generating fresh cryptographic keypair for test environment...${NC}"
 
-# Ensure dp1 binary is built in dp1-cli repository
-if [[ ! -x "${BIN}" ]]; then
-    echo -e "${BLUE}[GENERATE-ENV] Building dp1 binary in ${DP1_CLI_DIR}...${NC}"
-    (cd "${DP1_CLI_DIR}" && go build -o dp1 .)
+# ------------------------------------------------------------------------------
+# Locate dp1 CLI Binary (if available)
+# ------------------------------------------------------------------------------
+find_dp1_binary() {
+    if [[ -n "${DP1_BIN:-}" && -x "${DP1_BIN}" ]]; then
+        echo "${DP1_BIN}"
+        return 0
+    fi
+    if command -v dp1 >/dev/null 2>&1; then
+        command -v dp1
+        return 0
+    fi
+    if [[ -x "${SCRIPT_DIR}/bin/dp1" ]]; then
+        echo "${SCRIPT_DIR}/bin/dp1"
+        return 0
+    fi
+    if [[ -x "${SCRIPT_DIR}/../dp1-cli/dp1" ]]; then
+        echo "${SCRIPT_DIR}/../dp1-cli/dp1"
+        return 0
+    fi
+    if [[ -d "${SCRIPT_DIR}/../dp1-cli" && -f "${SCRIPT_DIR}/../dp1-cli/go.mod" ]]; then
+        if command -v go >/dev/null 2>&1; then
+            mkdir -p "${SCRIPT_DIR}/bin"
+            (cd "${SCRIPT_DIR}/../dp1-cli" && go build -o "${SCRIPT_DIR}/bin/dp1" .) >/dev/null 2>&1 || true
+            if [[ -x "${SCRIPT_DIR}/bin/dp1" ]]; then
+                echo "${SCRIPT_DIR}/bin/dp1"
+                return 0
+            fi
+        fi
+    fi
+    return 1
+}
+
+DP1_BIN_PATH="$(find_dp1_binary || true)"
+
+KEYS_PARSED=""
+
+if [[ -n "${DP1_BIN_PATH}" && -x "${DP1_BIN_PATH}" ]]; then
+    echo -e "${BLUE}[GENERATE-ENV] Using CLI binary at ${DP1_BIN_PATH}${NC}"
+    KEY_JSON=$("${DP1_BIN_PATH}" key generate --json 2>/dev/null || true)
+    if [[ -n "${KEY_JSON}" ]]; then
+        KEYS_PARSED=$(python3 -c "
+import sys, json
+try:
+    data = json.loads(sys.argv[1])
+    print(f\"{data['public_did_key']}|{data['public_hex']}|{data['private_key_hex_expanded']}\")
+except Exception:
+    pass
+" "${KEY_JSON}" 2>/dev/null || true)
+    fi
 fi
 
-# Generate random Ed25519 keypair using dp1 CLI
-KEY_JSON=$("${BIN}" key generate --json)
+# Fallback: Generate Ed25519 keypair and W3C did:key using pure Python 3
+if [[ -z "${KEYS_PARSED}" ]]; then
+    echo -e "${YELLOW}[GENERATE-ENV] Generating keypair via standalone Python 3 Ed25519 engine...${NC}"
+    KEYS_PARSED=$(python3 -c "
+import os, hashlib
 
-# Parse output fields using Python
-KEYS_PARSED=$(python3 -c "
-import sys, json
-data = json.loads(sys.argv[1])
-did = data['public_did_key']
-pub_hex = data['public_hex']
-priv_hex = data['private_key_hex_expanded']
-print(f'{did}|{pub_hex}|{priv_hex}')
-" "${KEY_JSON}")
+q = 2**255 - 19
+
+def expmod(b,e,m):
+    if e == 0: return 1
+    t = expmod(b,e//2,m)**2 % m
+    if e & 1: t = (t * b) % m
+    return t
+
+def inv(x):
+    return expmod(x,q-2,q)
+
+d = -121665 * inv(121666) % q
+I = expmod(2,(q-1)//4,q)
+
+def xrecover(y):
+    xx = (y*y-1) * inv(d*y*y+1)
+    x = expmod(xx,(q+3)//8,q)
+    if (x*x - xx) % q != 0: x = (x*I) % q
+    if x % 2 != 0: x = q-x
+    return x
+
+By = 4 * inv(5) % q
+Bx = xrecover(By)
+B = [Bx % q, By % q]
+
+def edwards(P,Q):
+    x1, y1 = P[0], P[1]
+    x2, y2 = Q[0], Q[1]
+    x3 = (x1*y2+x2*y1) * inv(1+d*x1*x2*y1*y2) % q
+    y3 = (y1*y2+x1*x2) * inv(1-d*x1*x2*y1*y2) % q
+    return [x3,y3]
+
+def scalarmult(P,e):
+    if e == 0: return [0,1]
+    Q = scalarmult(P,e//2)
+    Q = edwards(Q,Q)
+    if e & 1: Q = edwards(Q,P)
+    return Q
+
+secret_seed = os.urandom(32)
+h = hashlib.sha512(secret_seed).digest()
+a = int.from_bytes(h[:32], 'little')
+a &= (1 << 254) - 8
+a |= (1 << 254)
+A = scalarmult(B, a)
+
+y_bytes = bytearray(A[1].to_bytes(32, 'little'))
+if A[0] & 1:
+    y_bytes[31] |= 0x80
+pub_bytes = bytes(y_bytes)
+priv_expanded = secret_seed + pub_bytes
+
+ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
+def b58encode(v):
+    nPad = len(v) - len(v.lstrip(b'\x00'))
+    num = int.from_bytes(v, 'big')
+    res = ''
+    while num > 0:
+        num, mod = divmod(num, 58)
+        res = ALPHABET[mod] + res
+    return '1' * nPad + res
+
+mc_bytes = b'\xed\x01' + pub_bytes
+did_key = 'did:key:z' + b58encode(mc_bytes)
+
+print(f'{did_key}|{pub_bytes.hex()}|{priv_expanded.hex()}')
+")
+fi
 
 IFS='|' read -r DP1_CURATOR_KID DP1_PUBLIC_KEY DP1_PRIVATE_KEY <<< "${KEYS_PARSED}"
 
 if [[ -z "${DP1_CURATOR_KID}" || -z "${DP1_PRIVATE_KEY}" ]]; then
-    echo -e "${RED}[GENERATE-ENV] Failed to parse generated keypair!${NC}" >&2
+    echo -e "${RED}[GENERATE-ENV] Failed to generate valid keypair!${NC}" >&2
     exit 1
 fi
 
@@ -53,8 +161,6 @@ DP1_FEED_BASE_URL="https://feed.feralfile.com"
 DP1_PRIVATE_KEY="${DP1_PRIVATE_KEY}"
 DP1_PUBLIC_KEY="${DP1_PUBLIC_KEY}"
 DP1_CURATOR_KID="${DP1_CURATOR_KID}"
-# FIXTURE_ID="C01"
-# TEST_FIXTURE_PATH="./testing/playlists/playlist1.json"
 EOF
 
 chmod 600 "${ENV_FILE}"

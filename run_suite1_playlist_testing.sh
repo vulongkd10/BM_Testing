@@ -64,13 +64,69 @@ set +a
 : "${DP1_PRIVATE_KEY:?Missing DP1_PRIVATE_KEY in .env}"
 : "${DP1_CURATOR_KID:?Missing DP1_CURATOR_KID in .env}"
 
-BIN="${DP1_CLI_DIR}/dp1"
+# ------------------------------------------------------------------------------
+# Locate or Install dp1 CLI Binary (Universal Standalone Resolution)
+# ------------------------------------------------------------------------------
+resolve_dp1_binary() {
+    if [[ -n "${DP1_BIN:-}" && -x "${DP1_BIN}" ]]; then
+        echo "${DP1_BIN}"
+        return 0
+    fi
+    if command -v dp1 >/dev/null 2>&1; then
+        command -v dp1
+        return 0
+    fi
+    if [[ -x "${SCRIPT_DIR}/bin/dp1" ]]; then
+        echo "${SCRIPT_DIR}/bin/dp1"
+        return 0
+    fi
+    if [[ -x "${SCRIPT_DIR}/../dp1-cli/dp1" ]]; then
+        echo "${SCRIPT_DIR}/../dp1-cli/dp1"
+        return 0
+    fi
+    if [[ -d "${SCRIPT_DIR}/../dp1-cli" && -f "${SCRIPT_DIR}/../dp1-cli/go.mod" ]]; then
+        if command -v go >/dev/null 2>&1; then
+            mkdir -p "${SCRIPT_DIR}/bin"
+            log_info "Building dp1 CLI binary from peer repository ../dp1-cli..."
+            (cd "${SCRIPT_DIR}/../dp1-cli" && go build -o "${SCRIPT_DIR}/bin/dp1" .) >/dev/null 2>&1 || true
+            if [[ -x "${SCRIPT_DIR}/bin/dp1" ]]; then
+                echo "${SCRIPT_DIR}/bin/dp1"
+                return 0
+            fi
+        fi
+    fi
+    if command -v go >/dev/null 2>&1; then
+        mkdir -p "${SCRIPT_DIR}/bin"
+        log_info "Installing dp1 CLI binary via 'go install github.com/display-protocol/dp1-cli@latest'..."
+        GOBIN="${SCRIPT_DIR}/bin" go install github.com/display-protocol/dp1-cli@latest >/dev/null 2>&1 || true
+        if [[ -x "${SCRIPT_DIR}/bin/dp1-cli" ]]; then
+            mv "${SCRIPT_DIR}/bin/dp1-cli" "${SCRIPT_DIR}/bin/dp1"
+        fi
+        if [[ -x "${SCRIPT_DIR}/bin/dp1" ]]; then
+            echo "${SCRIPT_DIR}/bin/dp1"
+            return 0
+        fi
+    fi
+    GOPATH_BIN="$(go env GOPATH 2>/dev/null || echo "${HOME}/go")/bin/dp1"
+    if [[ -x "${GOPATH_BIN}" ]]; then
+        echo "${GOPATH_BIN}"
+        return 0
+    fi
+    return 1
+}
 
-# Ensure CLI binary is built in dp1-cli repository
-if [[ ! -x "${BIN}" ]]; then
-    log_info "Building dp1 CLI binary in ${DP1_CLI_DIR}..."
-    (cd "${DP1_CLI_DIR}" && go build -o dp1 .)
+BIN="$(resolve_dp1_binary || true)"
+
+if [[ -z "${BIN:-}" || ! -x "${BIN:-}" ]]; then
+    echo -e "${RED}[ERROR] dp1 CLI binary not found!${NC}" >&2
+    echo -e "${YELLOW}To execute this test suite on a standalone machine, please choose one option:${NC}" >&2
+    echo -e "${BLUE}  Option 1 (Automated): Install Go (https://go.dev) and run: go install github.com/display-protocol/dp1-cli@latest${NC}" >&2
+    echo -e "${BLUE}  Option 2 (Manual): Place your dp1 CLI binary at: ${SCRIPT_DIR}/bin/dp1${NC}" >&2
+    echo -e "${BLUE}  Option 3 (Environment): Set environment variable: export DP1_BIN=/path/to/dp1${NC}" >&2
+    exit 1
 fi
+
+log_info "Using dp1 CLI binary: ${BIN}"
 
 mkdir -p "${WORK_DIR}"
 mkdir -p "${RESULTS_DIR}"
