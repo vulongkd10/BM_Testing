@@ -1,0 +1,40 @@
+{
+  "dpVersion": "1.1.0",
+  "id": "11011011-1101-4101-8101-110110110110",
+  "slug": "defaults-inheritance-playlist",
+  "title": "TC11: Valid Defaults Inheritance Playlist",
+  "created": "2025-10-17T07:02:03Z",
+  "curators": [
+    {
+      "name": "",
+      "key": "$DP1_CURATOR_KID"
+    }
+  ],
+  "defaults": {
+    "display": {
+      "scaling": "fit",
+      "margin": "2vw",
+      "background": "transparent",
+      "autoplay": true,
+      "loop": false
+    },
+    "license": "open",
+    "duration": 120
+  },
+  "items": [
+    {
+      "id": "34343434-3434-4343-8343-343434343434",
+      "title": "Item Inheriting Top Level Defaults",
+      "source": "https://example.com/item1.html"
+    },
+    {
+      "id": "45454545-4545-4545-8545-454545454545",
+      "title": "Item Overriding Duration Default",
+      "source": "https://example.com/item2.html",
+      "duration": 600,
+      "display": {
+        "scaling": "fill"
+      }
+    }
+  ]
+}

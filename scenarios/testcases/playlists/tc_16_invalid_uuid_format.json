@@ -1,0 +1,21 @@
+{
+  "dpVersion": "1.1.0",
+  "id": "invalid-uuid-12345",
+  "slug": "invalid-uuid-playlist",
+  "title": "TC16: Invalid UUID Format Playlist",
+  "created": "2025-10-17T07:02:03Z",
+  "curators": [
+    {
+      "name": "",
+      "key": "$DP1_CURATOR_KID"
+    }
+  ],
+  "items": [
+    {
+      "id": "16161616-1616-4616-8616-161616161616",
+      "title": "Item in Invalid UUID Playlist",
+      "source": "https://example.com/artwork.html",
+      "duration": 30
+    }
+  ]
+}

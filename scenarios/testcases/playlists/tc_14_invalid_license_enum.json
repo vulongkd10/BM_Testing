@@ -1,0 +1,22 @@
+{
+  "dpVersion": "1.1.0",
+  "id": "14141414-1414-4414-8414-141414141414",
+  "slug": "invalid-license-playlist",
+  "title": "TC14: Invalid License Enum Playlist",
+  "created": "2025-10-17T07:02:03Z",
+  "curators": [
+    {
+      "name": "",
+      "key": "$DP1_CURATOR_KID"
+    }
+  ],
+  "items": [
+    {
+      "id": "89898989-8989-4989-8989-898989898989",
+      "title": "Artwork With Invalid License Enum",
+      "source": "https://example.com/artwork.html",
+      "duration": 30,
+      "license": "creative-commons"
+    }
+  ]
+}

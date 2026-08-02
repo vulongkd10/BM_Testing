@@ -1,0 +1,20 @@
+{
+  "dpVersion": "1.1.0",
+  "id": "66666666-6666-4666-8666-666666666666",
+  "slug": "invalid-margin-playlist",
+  "title": "TC06: Invalid Display Margin Unit Playlist",
+  "created": "2025-10-17T07:02:03Z",
+  "defaults": {
+    "display": {
+      "margin": "10em"
+    }
+  },
+  "items": [
+    {
+      "id": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee",
+      "title": "Artwork With Invalid Margin Unit",
+      "source": "https://example.com/artwork.html",
+      "duration": 30
+    }
+  ]
+}

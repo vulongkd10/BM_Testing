@@ -1,0 +1,22 @@
+{
+  "dpVersion": "1.1.0",
+  "id": "11111111-1111-4111-8111-111111111111",
+  "slug": "minimal-valid-playlist",
+  "title": "TC01: Minimal Valid DP-1 Playlist",
+  "created": "2025-10-17T07:02:03Z",
+  "curators": [
+    {
+      "name": "",
+      "key": "$DP1_CURATOR_KID"
+    }
+  ],
+  "items": [
+    {
+      "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      "title": "Minimal Artwork",
+      "source": "https://example.com/artwork/index.html",
+      "duration": 30,
+      "license": "open"
+    }
+  ]
+}

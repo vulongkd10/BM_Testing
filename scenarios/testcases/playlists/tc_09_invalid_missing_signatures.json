@@ -1,0 +1,15 @@
+{
+  "dpVersion": "1.1.0",
+  "id": "99999999-9999-4999-8999-999999999999",
+  "slug": "unsigned-playlist",
+  "title": "TC09: Invalid Unsigned Playlist (Missing Signatures)",
+  "created": "2025-10-17T07:02:03Z",
+  "items": [
+    {
+      "id": "12121212-1212-4212-8212-121212121212",
+      "title": "Unsigned Artwork Item",
+      "source": "https://example.com/artwork.html",
+      "duration": 30
+    }
+  ]
+}

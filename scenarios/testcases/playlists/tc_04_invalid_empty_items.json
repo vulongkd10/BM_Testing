@@ -1,0 +1,14 @@
+{
+  "dpVersion": "1.1.0",
+  "id": "44444444-4444-4444-8444-444444444444",
+  "slug": "empty-items-playlist",
+  "title": "TC04: Invalid Empty Items Array Playlist",
+  "created": "2025-10-17T07:02:03Z",
+  "curators": [
+    {
+      "name": "",
+      "key": "$DP1_CURATOR_KID"
+    }
+  ],
+  "items": []
+}

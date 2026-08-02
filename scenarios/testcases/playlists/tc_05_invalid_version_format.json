@@ -1,0 +1,21 @@
+{
+  "dpVersion": "1.1",
+  "id": "55555555-5555-4555-8555-555555555555",
+  "slug": "invalid-version-playlist",
+  "title": "TC05: Invalid Version Format Playlist",
+  "created": "2025-10-17T07:02:03Z",
+  "curators": [
+    {
+      "name": "",
+      "key": "$DP1_CURATOR_KID"
+    }
+  ],
+  "items": [
+    {
+      "id": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+      "title": "Sample Artwork",
+      "source": "https://example.com/artwork.html",
+      "duration": 30
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "dpVersion": "1.1.0",
+  "id": "10101010-1010-4010-8010-101010101010",
+  "slug": "tampered-signature-playlist",
+  "title": "TC10: Tampered Payload / Signature Mismatch Playlist",
+  "created": "2025-10-17T07:02:03Z",
+  "curators": [
+    {
+      "name": "",
+      "key": "$DP1_CURATOR_KID"
+    }
+  ],
+  "items": [
+    {
+      "id": "23232323-2323-4323-8323-232323232323",
+      "title": "Tampered Title After Signature Generation",
+      "source": "https://example.com/tampered.html",
+      "duration": 30
+    }
+  ],
+  "signatures": [
+    {
+      "alg": "ed25519",
+      "kid": "$DP1_CURATOR_KID",
+      "ts": "2026-07-22T10:43:12Z",
+      "payload_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "role": "curator",
+      "sig": "invalidSignatureBytes1234567890abcdefghijklmnopqrstuvwxyz"
+    }
+  ]
+}

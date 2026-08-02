@@ -1,0 +1,63 @@
+{
+  "dpVersion": "1.1.0",
+  "id": "22222222-2222-4222-8222-222222222222",
+  "slug": "full-featured-playlist",
+  "title": "TC02: Full Featured DP-1 Playlist",
+  "created": "2025-10-17T07:02:03Z",
+  "curators": [
+    {
+      "name": "Feral File Curator",
+      "key": "$DP1_CURATOR_KID"
+    }
+  ],
+  "defaults": {
+    "display": {
+      "scaling": "fit",
+      "margin": "5%",
+      "background": "#000000",
+      "autoplay": true,
+      "loop": true
+    },
+    "license": "open",
+    "duration": 300
+  },
+  "items": [
+    {
+      "id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+      "slug": "generative-artwork-1",
+      "title": "Generative Artwork #1",
+      "source": "https://cdn.example.com/artwork1/index.html",
+      "duration": 180,
+      "license": "open",
+      "display": {
+        "scaling": "fill",
+        "margin": "10px",
+        "background": "#111111"
+      },
+      "repro": {
+        "engineVersion": {
+          "chromium": "123.0.6312.58"
+        },
+        "seed": "0x84a39ef5",
+        "assetsSHA256": [
+          "473a218d6e3c4b5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e"
+        ],
+        "frameHash": {
+          "sha256": "bf20f91a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e",
+          "phash": "0xaf39"
+        }
+      },
+      "provenance": {
+        "type": "onChain",
+        "contract": {
+          "chain": "evm",
+          "standard": "erc721",
+          "address": "0x61d45475fe81ef46bdd8093b5c73efee03167e0",
+          "seriesId": 1,
+          "tokenId": "42",
+          "uri": "ipfs://bafybeih1234567890abcdefghijklmnopqrstuvwxyz"
+        }
+      }
+    }
+  ]
+}

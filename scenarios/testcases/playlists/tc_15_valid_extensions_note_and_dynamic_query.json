@@ -1,0 +1,25 @@
+{
+  "dpVersion": "1.1.0",
+  "id": "15151515-1515-4515-8515-151515151515",
+  "slug": "summary-and-ref-playlist",
+  "title": "TC15: Valid Summary, CoverImage and Ref Playlist",
+  "summary": "Exhibition playlist featuring summary and artwork ref annotations",
+  "coverImage": "https://example.com/cover.jpg",
+  "created": "2025-10-17T07:02:03Z",
+  "curators": [
+    {
+      "name": "",
+      "key": "$DP1_CURATOR_KID"
+    }
+  ],
+  "items": [
+    {
+      "id": "90909090-9090-4090-8090-909090909090",
+      "title": "Interactive Canvas",
+      "source": "https://example.com/canvas.html",
+      "duration": 45,
+      "license": "open",
+      "ref": "https://example.com/metadata/canvas.json"
+    }
+  ]
+}

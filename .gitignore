@@ -1,0 +1,71 @@
+# https://github.com/github/gitignore/blob/main/Go.gitignore
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Built CLI binary
+/dp1
+/dp1-cli
+
+# Test binaries & coverage tools
+*.test
+*.out
+coverage.txt
+coverage.html
+
+# Go workspace files
+go.work
+go.work.sum
+
+# ------------------------------------------------------------------------------
+# Environment files & Secrets (Ignores ALL .env files across all directories)
+# ------------------------------------------------------------------------------
+*.env
+.env
+.env.*
+.env local
+.env.*.local
+
+# Whitelist ONLY non-sensitive example templates
+!.env.example
+!.env_example
+!testing/.env_example
+
+# ------------------------------------------------------------------------------
+# Cryptographic Keys, Certificates, Credentials & Config Secrets
+# ------------------------------------------------------------------------------
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+config.yaml
+config.yml
+secrets/
+.dp1/
+
+# ------------------------------------------------------------------------------
+# Local smoke-test playlists & active test execution outputs
+# ------------------------------------------------------------------------------
+playlist.json
+playlist.signed.json
+active_*
+active_test_workspace/
+fetched_playlist.json
+suite_1_handoff.json
+scenarios/testcases/playlists/active_*
+scenarios/testcases/playlists/test_results/
+test_results/
+
+# ------------------------------------------------------------------------------
+# OS & IDE artifacts
+# ------------------------------------------------------------------------------
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo

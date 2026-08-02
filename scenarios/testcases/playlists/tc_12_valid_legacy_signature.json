@@ -1,0 +1,16 @@
+{
+  "dpVersion": "1.0.0",
+  "id": "12121212-1212-4212-8212-121212121212",
+  "slug": "legacy-signature-playlist",
+  "title": "TC12: Valid Legacy Signature DP-1 Playlist",
+  "created": "2025-08-05T00:00:00Z",
+  "items": [
+    {
+      "id": "56565656-5656-4565-8565-565656565656",
+      "title": "Legacy Item",
+      "source": "https://example.com/legacy_artwork.html",
+      "duration": 30
+    }
+  ],
+  "signature": "ed25519:a4f3c2d1b9e8f7a6b5c4d3e2f1a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1"
+}

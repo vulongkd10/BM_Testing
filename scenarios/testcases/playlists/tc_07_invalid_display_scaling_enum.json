@@ -1,0 +1,20 @@
+{
+  "dpVersion": "1.1.0",
+  "id": "77777777-7777-4777-8777-777777777777",
+  "slug": "invalid-scaling-playlist",
+  "title": "TC07: Invalid Display Scaling Enum Playlist",
+  "created": "2025-10-17T07:02:03Z",
+  "defaults": {
+    "display": {
+      "scaling": "zoom"
+    }
+  },
+  "items": [
+    {
+      "id": "ffffffff-ffff-4fff-8fff-ffffffffffff",
+      "title": "Artwork With Invalid Scaling Enum",
+      "source": "https://example.com/artwork.html",
+      "duration": 30
+    }
+  ]
+}
