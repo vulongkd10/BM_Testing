@@ -7,9 +7,9 @@
 
 set -euo pipefail
 
-# Locate repository root and testing directory
+# Locate dp1-cli repository and testing directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+DP1_CLI_DIR="$(cd "${SCRIPT_DIR}/../dp1-cli" && pwd)"
 ENV_FILE="${SCRIPT_DIR}/.env"
 TESTCASES_DIR="${SCRIPT_DIR}/scenarios/testcases/playlists"
 RESULTS_DIR="${TESTCASES_DIR}/test_results"
@@ -64,12 +64,12 @@ set +a
 : "${DP1_PRIVATE_KEY:?Missing DP1_PRIVATE_KEY in .env}"
 : "${DP1_CURATOR_KID:?Missing DP1_CURATOR_KID in .env}"
 
-BIN="${REPO_ROOT}/dp1"
+BIN="${DP1_CLI_DIR}/dp1"
 
-# Ensure CLI binary is built
+# Ensure CLI binary is built in dp1-cli repository
 if [[ ! -x "${BIN}" ]]; then
-    log_info "Building dp1 CLI binary..."
-    (cd "${REPO_ROOT}" && go build -o dp1 .)
+    log_info "Building dp1 CLI binary in ${DP1_CLI_DIR}..."
+    (cd "${DP1_CLI_DIR}" && go build -o dp1 .)
 fi
 
 mkdir -p "${WORK_DIR}"

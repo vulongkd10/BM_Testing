@@ -60,6 +60,7 @@ suite_1_handoff.json
 scenarios/testcases/playlists/active_*
 scenarios/testcases/playlists/test_results/
 test_results/
+project_context_and_roadmap.md
 
 # ------------------------------------------------------------------------------
 # OS & IDE artifacts

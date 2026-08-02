@@ -8,9 +8,9 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+DP1_CLI_DIR="$(cd "${SCRIPT_DIR}/../dp1-cli" && pwd)"
 ENV_FILE="${SCRIPT_DIR}/.env"
-BIN="${REPO_ROOT}/dp1"
+BIN="${DP1_CLI_DIR}/dp1"
 
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
@@ -19,10 +19,10 @@ NC='\033[0m' # No Color
 
 echo -e "${BLUE}[GENERATE-ENV] Generating fresh cryptographic keypair for test environment...${NC}"
 
-# Ensure dp1 binary is built
+# Ensure dp1 binary is built in dp1-cli repository
 if [[ ! -x "${BIN}" ]]; then
-    echo -e "${BLUE}[GENERATE-ENV] Building dp1 binary...${NC}"
-    (cd "${REPO_ROOT}" && go build -o dp1 .)
+    echo -e "${BLUE}[GENERATE-ENV] Building dp1 binary in ${DP1_CLI_DIR}...${NC}"
+    (cd "${DP1_CLI_DIR}" && go build -o dp1 .)
 fi
 
 # Generate random Ed25519 keypair using dp1 CLI
