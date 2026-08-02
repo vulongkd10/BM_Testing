@@ -7,9 +7,8 @@
 
 set -euo pipefail
 
-# Locate dp1-cli repository and testing directory
+# Locate testing directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DP1_CLI_DIR="$(cd "${SCRIPT_DIR}/../dp1-cli" && pwd)"
 ENV_FILE="${SCRIPT_DIR}/.env"
 TESTCASES_DIR="${SCRIPT_DIR}/scenarios/testcases/playlists"
 RESULTS_DIR="${TESTCASES_DIR}/test_results"
