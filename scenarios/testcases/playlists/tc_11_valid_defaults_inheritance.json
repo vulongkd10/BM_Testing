@@ -25,12 +25,12 @@
     {
       "id": "34343434-3434-4343-8343-343434343434",
       "title": "Item Inheriting Top Level Defaults",
-      "source": "https://example.com/item1.html"
+      "source": "https://cdn.feralfileassets.com/exhibition-thumbnails/3c7873af-0dfb-468f-8a29-b27b0b853691/1726302743"
     },
     {
       "id": "45454545-4545-4545-8545-454545454545",
       "title": "Item Overriding Duration Default",
-      "source": "https://example.com/item2.html",
+      "source": "https://cdn.feralfileassets.com/exhibition-thumbnails/3c7873af-0dfb-468f-8a29-b27b0b853691/1726302743",
       "duration": 600,
       "display": {
         "scaling": "fill"

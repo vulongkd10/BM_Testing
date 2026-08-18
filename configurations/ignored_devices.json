@@ -1,0 +1,7 @@
+{
+  "description": "List of FF1 device IDs, mDNS instance names, hostnames, or IP addresses to ignore during Suite 3 playback testing",
+  "ignored_devices": [
+    "FF1-X45K6QSZ.local",
+    "FF1-RJ28EQ2H.local"
+  ]
+}
